@@ -2,6 +2,8 @@ process.env["NTBA_FIX_319"] = 1;
 
 const TelegramBot = require('node-telegram-bot-api');
 const callCalendar = require('./calendar').callCalendar;
+const timetable = require('./timetable-maker');
+const moment = require('moment');
 
 const CronJob = require('cron').CronJob;
 
@@ -10,10 +12,10 @@ const credentials = require('./api-credentials.json');
 const token = credentials.telegramToken;
 
 const JERUSALEM = 156;
-const placeId = JERUSALEM;
 const bot = new TelegramBot(token, {polling: true});
 
 const GET_TODAY_TIMES_COMMAND = "today's times";
+const TEFILOTH_TIMES = "tefiloth times pdf";
 
 const job = new CronJob('00 30 11 * * 1-5', function () {
         /*
@@ -27,18 +29,73 @@ const job = new CronJob('00 30 11 * * 1-5', function () {
     true /* Start the job right now */
 );
 
+const testObj = {
+    shabat: {
+        shabat_name: "יתרו",
+        hebDate: "י\"ח שבט  ה'תשע\"ח",
+        loaziDate: "3/2/2018",
+        times: [
+            {
+                "name": "כניסת שבת",
+                "value": "17:02",
+                "today": false
+            },
+            {
+                "name": "צאת שבת",
+                "value": "18:14",
+                "today": false
+            }]
+    }
+};
+
+function addTimes(obj) {
+    const kabalatShabat = {
+        name: "כניסת שבת",
+        value: moment(obj.shabat.times[0].value, 'HH:mm').add(20, 'm').format("HH:mm"),
+    };
+
+    const shaharit = {
+        "name": "כניסת שבת",
+        "value": "08:00",
+    };
+
+    const minha = {
+        "name": "כניסת שבת",
+        "value": "16:00",
+    };
+
+    const lesson = {
+        "name": "כניסת שבת",
+        "value": "12:30",
+    };
+
+    obj.shabat.times.push(kabalatShabat);
+    obj.shabat.times.push(shaharit);
+    obj.shabat.times.push(lesson);
+    obj.shabat.times.push(minha);
+    return obj;
+}
 
 bot.onText(/\/start/, (msg) => {
     bot.sendMessage(msg.chat.id, "Welcome", {
         "reply_markup": {
-            "keyboard": [[GET_TODAY_TIMES_COMMAND]],
-            "resize_keyboard": true
+            "keyboard": [
+                [GET_TODAY_TIMES_COMMAND],
+                [TEFILOTH_TIMES]
+            ], "resize_keyboard": true
         }
     });
-
 });
 
 bot.on('message', (msg) => {
+    if (msg.text.indexOf(TEFILOTH_TIMES) === 0) {
+        const chatId = msg.chat.id;
+        bot.sendMessage(chatId, 'wait a minute...');
+        timetable.createTimetable(addTimes(testObj)).then(res => {
+            bot.sendMessage(chatId, `Done!`);
+            bot.sendDocument(chatId, res.filename || res.stream, {}, {filename: 'timetable.pdf'});
+        }).catch(err => bot.sendMessage(chatId, `error: ${JSON.stringify(err)}`))
+    }
 
     if (msg.text.indexOf(GET_TODAY_TIMES_COMMAND) === 0) {
         const chatId = msg.chat.id;
