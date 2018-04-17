@@ -8,7 +8,7 @@ const CronJob = require('cron').CronJob;
 
 const credentials = require('./api-credentials.json');
 
-const token = credentials.telegramToken;
+const token = getTelegramToken();
 
 const JERUSALEM = 156;
 const bot = new TelegramBot(token, {polling: true});
@@ -53,7 +53,7 @@ bot.on('message', (msg) => {
                         bot.sendDocument(chatId, res.filename || res.stream, {}, {filename: 'timetable.pdf'});
                     });
             }).catch(err => bot.sendMessage(chatId, `error: ${JSON.stringify(err)}`))
-}
+    }
 
     if (msg.text.indexOf(GET_TODAY_TIMES_COMMAND) === 0) {
         const chatId = msg.chat.id;
@@ -79,6 +79,13 @@ bot.on('message', (msg) => {
 bot.on('polling_error', (error) => {
     console.log('ERROR: ', error.code);  // => 'EFATAL'
 });
+
+function getTelegramToken() {
+    const processEnv = process.env;
+    return (processEnv.NODE_ENV === 'production') ?
+        processEnv.TELEGRAM_TOKEN :
+        credentials.telegramToken;
+}
 
 function getCurrentDate() {
     const today = new Date();
