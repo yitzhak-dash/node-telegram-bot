@@ -6,8 +6,6 @@ const timetable = require('./timetable-maker');
 
 const CronJob = require('cron').CronJob;
 
-const credentials = require('./api-credentials.json');
-
 const token = getTelegramToken();
 
 const JERUSALEM = 156;
@@ -84,7 +82,7 @@ function getTelegramToken() {
     const processEnv = process.env;
     return (processEnv.NODE_ENV === 'production') ?
         processEnv.TELEGRAM_TOKEN :
-        credentials.telegramToken;
+        require('./api-credentials.json').telegramToken;
 }
 
 function getCurrentDate() {
