@@ -12,13 +12,13 @@ function addTimes(obj) {
     };
 
     const shaharit = {
-        "name": "תפילת שחרית",
-        "value": "08:00",
+        name: "תפילת שחרית",
+        value: "08:00",
     };
 
     const minha = {
         "name": "תפילת מנחה",
-        "value": "16:30",
+        "value": moment(obj.shabat.times[0].value, 'HH:mm').add(-90, 'm').format("HH:mm"),
     };
 
     const lesson = {
