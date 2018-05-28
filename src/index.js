@@ -82,7 +82,7 @@ function getTelegramToken() {
     const processEnv = process.env;
     return (processEnv.NODE_ENV === 'production') ?
         processEnv.TELEGRAM_TOKEN :
-        require('./api-credentials.json').telegramToken;
+        require('../api-credentials.json').telegramToken;
 }
 
 function getCurrentDate() {

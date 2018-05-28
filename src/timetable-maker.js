@@ -23,7 +23,7 @@ function addTimes(obj) {
 
     const lesson = {
         "name": "שיעור",
-        "value": "12:30",
+        "value": "12:20",
     };
 
     obj.shabat.times[1].name += ", תפילת ערבית";
