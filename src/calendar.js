@@ -40,4 +40,4 @@ function callCalendar(placeId, year, month, day, r = "heb", u = true, f = false)
     });
 }
 
-module.exports = {callCalendar};
+module.exports = { callCalendar };

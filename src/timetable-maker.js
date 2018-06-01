@@ -18,7 +18,7 @@ function addTimes(obj) {
 
     const minha = {
         "name": "תפילת מנחה",
-        "value": moment(obj.shabat.times[0].value, 'HH:mm').add(-90, 'm').format("HH:mm"),
+        "value": "13:30"//moment(obj.shabat.times[0].value, 'HH:mm').add(-90, 'm').format("HH:mm"),
     };
 
     const lesson = {
@@ -28,7 +28,7 @@ function addTimes(obj) {
 
     obj.shabat.times[1].name += ", תפילת ערבית";
 
-    const times = [
+    obj.shabat.times = [
         obj.shabat.times[0],
         kabalatShabat,
         shaharit,
@@ -36,7 +36,6 @@ function addTimes(obj) {
         minha,
         obj.shabat.times[1]
     ];
-    obj.shabat.times = times;
     return obj;
 }
 
@@ -60,11 +59,11 @@ function createTimetable(data, toFile = false) {
                 if (err) {
                     reject(err);
                 } else {
-                    resolve({stream});
+                    resolve({ stream });
                 }
             });
         }
     });
 }
 
-module.exports = {createTimetable};
+module.exports = { createTimetable };
