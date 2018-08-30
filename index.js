@@ -67,7 +67,7 @@ bot.on('message', (msg) => {
         callCalendar(JERUSALEM, year, month, day)
             .then((data) => {
                 const fixedData = timetable.addSaturdayTimes(data);
-                let res = `${fixedData.shabat.shabat_name}\n`;
+                let res = `שבת :${fixedData.shabat.shabat_name}\n`;
                 fixedData.shabat.times.forEach(time => {
                     res += `${time.name}:\t\t${time.value}\n`;
                 });
