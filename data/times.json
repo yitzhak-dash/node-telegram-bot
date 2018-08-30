@@ -1,5 +1,11 @@
 [
   {
+    "name": "כניסת שבת",
+    "value": "SHABBAT_ENTRANCE",
+    "set": "CANDLE_LIGHTING",
+    "day": 6
+  },
+  {
     "name": "קבלת שבת",
     "value": "CANDLE_LIGHTING + 20m",
     "day": 6
@@ -21,7 +27,7 @@
   },
   {
     "name": "תפילת ערבית, צאת שבת",
-    "value": "END_OF_SHABBAT",
+    "value": "ENDS_SHABBAT",
     "day": 7
   }
 ]

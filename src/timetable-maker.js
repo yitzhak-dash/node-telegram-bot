@@ -3,6 +3,7 @@ const pdf = require('html-pdf');
 const config = require('config');
 const _ = require('lodash');
 const moment = require('moment');
+const data = require('../data/times.json');
 
 
 function addTimes(obj) {
@@ -66,4 +67,4 @@ function createTimetable(data, toFile = false) {
     });
 }
 
-module.exports = { createTimetable };
+module.exports = { createTimetable, addSaturdayTimes: addTimes };
